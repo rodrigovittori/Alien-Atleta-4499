@@ -1,23 +1,21 @@
 #pgzero
-""" [M6.L3] - Actividad #4: "Personaje"
-    Objetivo: enseñar a los alumnos a crear Actores y mostrarlos por pantalla 
-
-    NOTA 1: El código de este proyecto está publicado en el repo:
+""" NOTA 1: El código de este proyecto está publicado en el repo:
             > https://github.com/rodrigovittori/Alien-Atleta-4499/
     
     NOTA 2: Los assests de este proyecto son del sitio web de Kenney,
             pueden obtener más modelos en: https://kenney.nl/assets/platformer-pack-redux
             y revisar la colección completa en: https://kenney.nl/assets/series:Platformer%20Pack  
     
-    ---------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 
-    [M6.L3] - Actividad #5: "La función update(dt)"
-    Objetivo: Familiarizarnos con la función update() 
+    [M6.L4] - Actividad Nº 1: "Actualizando la caja"
+    Objetivo: Lograr que la caja "respawnee" cada vez que se salga de la pantalla
+    Nota: Los límites para evitar que el PJ se salga de la panmtalla los implementaremos
+          en la Actividad Nº 3 de hoy
 
-    Paso 1) Vamos a crear un nuevo Actor llamado "caja", con la imágen "box"
-    Paso 2) Agregar en draw() el código necesario para que dibuje la caja
-    Paso 3) Vamos a definir nuestro métdodo "update" (para que funcione con pgzero NECESITA su parámetro dt -deltatime-)
-    Paso 4) Agregamos el código necesario para que nuestro personaje se desplace hacia la derecha y la caja hacia la izquierda  """
+    Paso Nº 1) Vamos a poner una condición que detecte CUANDO sale de la pantalla (x < 0)
+    Paso Nº 2) DENTRO de esa condición agregamos la lógica de "respawn"
+                      -> moverla fuera de la panatlla pero del lado derecho   """
 
 WIDTH = 600 # Ancho de la ventana (en px)
 HEIGHT = 300 # Alto de la ventana (en px)
@@ -44,5 +42,10 @@ def update(dt): # update(dt) es el bucle ppal de nuestro juego, dt significa del
     personaje.angle -= 5 #para las piruetas :V
     
     # Mover la caja:
-    caja.x -= 5     # mover la caja 5 px a la izquierda en cada frame
-    caja.angle += 5 # roto la caja 5 grados cada frame
+    if (caja.x < 0):     # Si la caja salió de la ventana de juego...
+        caja.x += WIDTH  # La llevamos a la otra punta de la pantalla
+    else:
+        # Si todavía no se escapa de la ventana...
+        caja.x -= 5      # mover la caja 5 px a la izquierda en cada frame
+    
+    caja.angle = (caja.angle % 360) + 5  # rotamos la caja 5 grados cada frame
