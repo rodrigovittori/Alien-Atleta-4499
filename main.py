@@ -9,21 +9,13 @@
     
 ---------------------------------------------------------------------------------------------------
 
-    [M6.L4] - Actividad Nº 9 y 10 (Extras): "Esquivando"
-    Objetivo: Agregar la lógica necesaria para que nuestro personaje pueda agacharse
+    [M7.L1] - Actividad Nº 1: Método Colliderect
+    Objetivo: Cambiar el sprite del personaje cuando éste entre en colisión con la caja
 
-    NOTA: La primer tarea extra ("Controles mejorados") ya la cumple nuestro código anterior
+    Paso Nº 1) Agregar condición en update() que chequee si se dá una colisión entre PJ y caja
+    Paso Nº 2) Si se dá la colisión, cambiamos la imágen a "hurt"
 
-    Paso Nº 1) Agregar check para cuando se presione la tecla "S" o la flecha hacia abajo
-    Paso Nº 2) Modificar la altura del personaje cuando se presione la tecla
-    Paso Nº 3) Cambiar el sprite del personaje
-    Paso Nº 4) Crear dos atributos "esta_agachado" y "timer_agachado" para controlar cuando deshacemos los cambios
-    Paso Nº 5) Implementar la lógica de reseteo de la altura
-    Paso Nº 6) Agregamos una condición para que NO se pueda saltar mientras el PJ está agachado
-
-    NOTA: Si NO queremos permitir que el PJ se mueva mientras está agachado debemos agregar una cond. extra al mov.
-
-    Nota: Para evitar que al agacharse se anule la animación de salto DEBERÍAMOS implementar un check para prevenirlo
+    Extra: Agregamos un Rect a la caja para mostrar visualmente la colisión
 
 ---------------------------------------------------------------------------------------------------
 
@@ -66,6 +58,7 @@ def draw(): # draw() como su nombre lo indica es el método de pgzero que dibuja
     
     screen.draw.rect(personaje.collidebox, (255, 0, 255)) # Dibujamos collidebox del PJ
     # INDICADOR DE POS DEL PJ EN EJE X: # screen.draw.text(("X= " + str(personaje.x)), (30,30), background="white", color="black", fontsize=24)
+    screen.draw.rect(caja.collidebox, (255, 0, 0)) # Dibujamos collidebox del PJ
 
 def update(dt): # update(dt) es el bucle ppal de nuestro juego, dt significa delta time (tiempo en segundos entre cada frame)
     # > https://pygame-zero.readthedocs.io/en/stable/hooks.html#update
@@ -108,10 +101,23 @@ def update(dt): # update(dt) es el bucle ppal de nuestro juego, dt significa del
         nva_imagen = "duck"
         personaje.timer_agachado = 0.1 # tiempo que nuestro PJ seguirá agachado DESPUÉS de soltar la tecla
         personaje.esta_agachado = True
+
+    """  ########################
+        # COMPROBAR COLISIONES #
+       ########################   """
+
+    # Nota: migrar a función comprobar_colisiones()
+
+    if personaje.colliderect(caja):
+        if (nva_imagen != "hurt"):
+            nva_imagen = "hurt"
+            # NOTA: Si queremos implementar un sistema de "daño" en lugar de una muerte instantánea, éste es el lugar :D
     
     ###################################################################################
     
     # Mover la caja - NOTA/TO-DO: Migrar a una función
+
+    caja.collidebox = Rect((caja.x - int(caja.width / 2), caja.y - int(caja.height / 2)), (caja.width, caja.height))
     
     if (caja.x < 0):     # Si la caja salió de la ventana de juego...
         caja.x += WIDTH  # La llevamos a la otra punta de la pantalla
